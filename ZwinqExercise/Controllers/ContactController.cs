@@ -17,15 +17,15 @@ namespace ZwinqExercise.Controllers
         {
             this.contactRepository = new ContactRepository();
         }
-        public Contact[] Get()
+        public List<Vehicle> Get()
         {
-            return contactRepository.GetAllContacts();
+            return contactRepository.GetAllVehicles();
         }
-        public HttpResponseMessage Post(Contact contact)
+        public HttpResponseMessage Post(Vehicle contact)
         {
             this.contactRepository.SaveContact(contact);
 
-            var response = Request.CreateResponse<Contact>(HttpStatusCode.Created, contact);
+            var response = Request.CreateResponse<Vehicle>(HttpStatusCode.Created, contact);
 
             return response;
         }

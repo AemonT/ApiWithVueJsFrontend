@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -11,46 +12,74 @@ namespace ZwinqExercise.Services
     {
         private const string Cachekey = "ContactStore";
         private const string jsonFile = @"C:\Users\aemon\source\repos\ZwinqExercise\DummyData.txt";
+        private SqlConnection sqlConnection = new SqlConnection("Data Source =(local); Initial Catalog=ZwinqExerciseDB; Integrated Security=SSPI");
+
 
         public ContactRepository()
         {
 
         }
-        public Contact[] GetAllContacts()
+        public List<Vehicle> GetAllVehicles()
         {
-
-
-            using (StreamReader streamReader = new StreamReader(jsonFile))
+            SqlDataReader sql = null;
+            List<Vehicle> results = new List<Vehicle>();
+            try
             {
-                string json = streamReader.ReadToEnd();
-                var contacts = JsonConvert.DeserializeObject<List<Contact>>(json);
-                if (contacts != null)
-                {
-                    return contacts.ToArray();
+                sqlConnection.Open();
 
+                SqlCommand cmd = new SqlCommand("select * from ZwinqExerciseDB.dbo.Zwinq_Vehicle_Table", sqlConnection);
+
+                sql = cmd.ExecuteReader();
+
+                while (sql.Read())
+                {
+                    results.Add(new Vehicle
+                    {
+                        Id = sql["vehicle_id"].ToString(),
+                        LicensePlate = sql["license_plate"].ToString(),
+                        VehicleFactorer = sql["vehicle_brand"].ToString(),
+                        VehicleType = sql["vehicle_type"].ToString(),
+                        FuelType = sql["fuel_type"].ToString()
+                    });
                 }
-                
+                return results;
+
+
 
             }
-
-            
-            return new Contact[]
+            finally
             {
-                new Contact
+                if(sql != null)
                 {
-                    Id = 0,
-                    Name = "Placeholder"
+                    sql.Close();
                 }
+                if(sqlConnection != null)
+                {
+                    sqlConnection.Close();
+                }
+            }
+            //using (StreamReader streamReader = new StreamReader(jsonFile))
+            //{
+            //    string json = streamReader.ReadToEnd();
+            //    var contacts = JsonConvert.DeserializeObject<List<Contact>>(json);
+            //    if (contacts != null)
+            //    {
+            //        return contacts.ToArray();
 
-            };
+            //    }
+                
+
+            //}
+
+
         }
-        public bool SaveContact(Contact contact)
+        public bool SaveContact(Vehicle contact)
         {
-            List<Contact> contacts;
+            List<Vehicle> contacts;
             using (StreamReader streamReader = new StreamReader(jsonFile))
             {
                 string json = streamReader.ReadToEnd();
-                contacts = JsonConvert.DeserializeObject<List<Contact>>(json);
+                contacts = JsonConvert.DeserializeObject<List<Vehicle>>(json);
             }
             if (contact != null)
             {
@@ -73,6 +102,11 @@ namespace ZwinqExercise.Services
                 }
             }
             return false;
+        }
+        public Vehicle[] GetChosenContacts(Vehicle contact)
+        {
+
+            return null;
         }
     }
 }

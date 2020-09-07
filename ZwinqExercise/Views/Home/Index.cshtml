@@ -21,7 +21,7 @@
         $(function () {
             $.getJSON('/api/contact', function (contactsJsonPayload) {
                 $(contactsJsonPayload).each(function (i, item) {
-                    $('#contacts').append('<li>' + item.Id + '\n' + item.Name + '</li>');
+                    $('#contacts').append('<li>' + item.Id + '\n' + item.LicensePlate + '\n' + item.VehicleFactorer + '</li>');
                 });
             });
         });
