@@ -11,7 +11,7 @@ namespace ZwinqExercise.Models
 
         public string LicensePlate { get; set; }
 
-        public string VehicleFactorer { get; set; }
+        public string VehicleManufacturer { get; set; }
 
         public string VehicleType { get; set; }
 

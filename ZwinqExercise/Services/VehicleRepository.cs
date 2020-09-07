@@ -6,16 +6,17 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using ZwinqExercise.Models;
+using System.Data;
 namespace ZwinqExercise.Services
 {
-    public class ContactRepository
+    public class VehicleRepository
     {
         private const string Cachekey = "ContactStore";
         private const string jsonFile = @"C:\Users\aemon\source\repos\ZwinqExercise\DummyData.txt";
         private SqlConnection sqlConnection = new SqlConnection("Data Source =(local); Initial Catalog=ZwinqExerciseDB; Integrated Security=SSPI");
 
 
-        public ContactRepository()
+        public VehicleRepository()
         {
 
         }
@@ -37,7 +38,7 @@ namespace ZwinqExercise.Services
                     {
                         Id = sql["vehicle_id"].ToString(),
                         LicensePlate = sql["license_plate"].ToString(),
-                        VehicleFactorer = sql["vehicle_brand"].ToString(),
+                        VehicleManufacturer = sql["vehicle_brand"].ToString(),
                         VehicleType = sql["vehicle_type"].ToString(),
                         FuelType = sql["fuel_type"].ToString()
                     });
@@ -58,40 +59,33 @@ namespace ZwinqExercise.Services
                     sqlConnection.Close();
                 }
             }
-            //using (StreamReader streamReader = new StreamReader(jsonFile))
-            //{
-            //    string json = streamReader.ReadToEnd();
-            //    var contacts = JsonConvert.DeserializeObject<List<Contact>>(json);
-            //    if (contacts != null)
-            //    {
-            //        return contacts.ToArray();
 
-            //    }
-                
-
-            //}
 
 
         }
-        public bool SaveContact(Vehicle contact)
+        public bool CreateNewVehicle(Vehicle vehicle)
         {
-            List<Vehicle> contacts;
-            using (StreamReader streamReader = new StreamReader(jsonFile))
-            {
-                string json = streamReader.ReadToEnd();
-                contacts = JsonConvert.DeserializeObject<List<Vehicle>>(json);
-            }
-            if (contact != null)
+            if (vehicle != null)
             {
                 try
                 {
-
-                    using (StreamWriter file = File.CreateText(jsonFile))
+                    SqlCommand sql = new SqlCommand("Insert into ZwinqExerciseDB.dbo.Zwinq_Vehicle_Table values('"
+                        + vehicle.Id +"','" 
+                        + vehicle.LicensePlate + "','"
+                        + vehicle.VehicleManufacturer + "','"
+                        + vehicle.VehicleType + "','"
+                        + vehicle.FuelType + "')", sqlConnection);
+                    sqlConnection.Open();
+                    sql.CommandType = CommandType.Text;
+                    int i = sql.ExecuteNonQuery();
+                    sqlConnection.Close();
+                    if(i != 0)
                     {
-                        JsonSerializer serializer = new JsonSerializer();
-                        contacts.Add(contact);
-                        serializer.Serialize(file, contacts);
                         return true;
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
 
@@ -103,10 +97,32 @@ namespace ZwinqExercise.Services
             }
             return false;
         }
-        public Vehicle[] GetChosenContacts(Vehicle contact)
-        {
 
-            return null;
+        public bool DeleteExistingVehicle(Vehicle vehicle)
+        {
+            try
+            {
+                SqlCommand sql = new SqlCommand("DELETE from ZwinqExerciseDB.dbo.Zwinq_Vehicle_Table where vehicle_id ='" + vehicle.Id + "'", sqlConnection);
+                sqlConnection.Open();
+                int i = sql.ExecuteNonQuery();
+                sqlConnection.Close();
+                if(i != 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+            return false;
         }
+
+
     }
 }

@@ -2,37 +2,50 @@
 <div id="body">
     <ul id="contacts"></ul>
 </div>
-<form id="saveContactForm" method ="post">
-<h3>Create new contact</h3>
+<form id="saveVehicleForm" method ="post">
+<h3>Create new vehicle</h3>
 <p>
-    <label for="contactId">Contact ID:</label>
+    <label for="vehicleId">Vehicle ID:</label>
     <input type="text" name="Id"/>
 </p>
 <p>
-    <label for="contactName">Contact Name:</label>
-    <input type="text" name="Name" />
+    <label for="licensePlate">License Plate:</label>
+    <input type="text" name="LicensePlate" />
 </p>
-<input type="button" id="saveContact" value="save" />
+<p>
+    <label for="vehicleManufacturer">Manufacturer:</label>
+    <input type="text" name="VehicleManufacturer" />
+</p>
+<p>
+    <label for="vehicleType">Vehicle Type:</label>
+    <input type="text" name="VehicleType" />
+</p>
+<p>
+    <label for="fuelType">Type of Fuel:</label>
+    <input type="text" name="FuelType" />
+</p>
+<input type="button" id="saveVehicle" value="save" />
 </form>
 
 @section scripts{
     <script type="text/javascript">
 
         $(function () {
-            $.getJSON('/api/contact', function (contactsJsonPayload) {
+            $.getJSON('/api/vehicle', function (contactsJsonPayload) {
                 $(contactsJsonPayload).each(function (i, item) {
-                    $('#contacts').append('<li>' + item.Id + '\n' + item.LicensePlate + '\n' + item.VehicleFactorer + '</li>');
+                    $('#contacts').append('<li>' + item.Id + '\n' + item.LicensePlate + '\n' + item.VehicleManufacturer + '</li>');
                 });
             });
         });
 
-        $('#saveContact').click(function() {
-            $.post("api/contact", $("#saveContactForm").serialize(),
+        $('#saveVehicle').click(function() {
+            $.post("api/vehicle", $("#saveVehicleForm").serialize(),
                 function(value)
-                {
-                    $('#contacts').append('<li>' + value.Id + '\n' + value.Name + '</li>');
+                {x
+                    $('#contacts').append('<li>' + value.Id + '\n' + value.LicensePlate + '\n' + value.VehicleManufacturer + '\n' + value.VehicleType + '\n' + value.FuelType + '</li>');
                 },
-                "json");
+                "json"), location.reload();
+
         });
     </script>
 }
