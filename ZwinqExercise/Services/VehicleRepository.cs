@@ -7,18 +7,19 @@ using System.Linq;
 using System.Web;
 using ZwinqExercise.Models;
 using System.Data;
+using ZwinqExercise.DatabaseConnection;
 namespace ZwinqExercise.Services
 {
     public class VehicleRepository
     {
         private const string Cachekey = "ContactStore";
-        private const string jsonFile = @"C:\Users\aemon\source\repos\ZwinqExercise\DummyData.txt";
-        private SqlConnection sqlConnection = new SqlConnection("Data Source =(local); Initial Catalog=ZwinqExerciseDB; Integrated Security=SSPI");
+        private LocalDatabaseConnection databaseConnection = new LocalDatabaseConnection();
+        private SqlConnection sqlConnection;
 
 
         public VehicleRepository()
         {
-
+            sqlConnection = new SqlConnection(databaseConnection.connectionPath); 
         }
         public List<Vehicle> GetAllVehicles()
         {
@@ -120,7 +121,7 @@ namespace ZwinqExercise.Services
                 Console.WriteLine(ex.ToString());
                 return false;
             }
-            return false;
+
         }
 
 
