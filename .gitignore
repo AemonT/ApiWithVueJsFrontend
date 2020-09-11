@@ -109,7 +109,8 @@ _TeamCity*
 
 # DotCover is a Code Coverage Tool
 *.dotCover
-
+LocalDatabaseConnection.cs
+DummyData.txt
 # NCrunch
 _NCrunch_*
 .*crunch*.local.xml

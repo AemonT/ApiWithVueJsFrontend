@@ -12,7 +12,7 @@ namespace ZwinqExercise.Services
 {
     public class VehicleRepository
     {
-        private const string Cachekey = "ContactStore";
+
         private LocalDatabaseConnection databaseConnection = new LocalDatabaseConnection();
         private SqlConnection sqlConnection;
 

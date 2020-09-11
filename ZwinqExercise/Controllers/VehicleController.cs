@@ -4,11 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using ZwinqExercise.Models;
 using ZwinqExercise.Services;
 
 namespace ZwinqExercise.Controllers
 {
+    [EnableCors(origins: "http://localhost:1337", headers: "", methods: "")]
     public class VehicleController : ApiController
     {
         
@@ -33,7 +35,6 @@ namespace ZwinqExercise.Controllers
         {
             this.vehicleRepository.DeleteExistingVehicle(vehicle);
 
-            //var response = Request.CreateResponse<Vehicle>(HttpStatusCode.)
             return null;
         }
     }
