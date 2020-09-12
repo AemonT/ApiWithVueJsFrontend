@@ -10,32 +10,34 @@ using ZwinqExercise.Services;
 
 namespace ZwinqExercise.Controllers
 {
-    [EnableCors(origins: "http://localhost:1337", headers: "", methods: "")]
+    [EnableCors(origins: "http://localhost:1337", headers: "*", methods: "*")]
     public class VehicleController : ApiController
     {
-        
-        private VehicleRepository  vehicleRepository;
+
+        private VehicleRepository vehicleRepository;
         public VehicleController()
         {
             this.vehicleRepository = new VehicleRepository();
         }
-        public List<Vehicle> Get()
+        /// <summary>
+        /// Meant for adding new vehicles to the database
+        /// </summary>
+        /// <param name="vehicle">the vehicle that is going to be added send from the inputs on the frontend</param>
+        /// <returns>all the vehicles</returns>
+        
+        public List<Vehicle> Create(Vehicle vehicle)
         {
-            return vehicleRepository.GetAllVehicles();
+            return this.vehicleRepository.CreateNewVehicle(vehicle);
         }
-        public HttpResponseMessage Create(Vehicle vehicle)
+        
+        public List<Vehicle> Get(Vehicle vehicle)
         {
-            this.vehicleRepository.CreateNewVehicle(vehicle);
-
-            var response = Request.CreateResponse<Vehicle>(HttpStatusCode.Created, vehicle);
-
-            return response;
+            return this.vehicleRepository.SearchOnFuelType(vehicle);
         }
-        public HttpResponseMessage Delete(Vehicle vehicle)
-        {
-            this.vehicleRepository.DeleteExistingVehicle(vehicle);
 
-            return null;
+        public List<Vehicle> Delete(Vehicle vehicle)
+        {
+            return this.vehicleRepository.DeleteExistingVehicle(vehicle);
         }
     }
 }
