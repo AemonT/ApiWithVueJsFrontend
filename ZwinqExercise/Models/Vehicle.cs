@@ -5,6 +5,9 @@ using System.Web;
 
 namespace ZwinqExercise.Models
 {
+    /// <summary>
+    /// Object that will be inserted into the database.
+    /// </summary>
     public class Vehicle
     {
         public string Id { get; set; }

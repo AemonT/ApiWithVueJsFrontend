@@ -29,12 +29,12 @@
             </p>
             <input type="button" id="saveVehicle" value="save" v-on:click="sendToServer" />
             <input type="button" id="deleteVehicle" value="delete" v-on:click="deleteFromDatabase" />
-            <select name="FuelTypeFilter" id="FuelTypeFilter" v-model="FuelTypeFilter">
+            <!--<select name="FuelTypeFilter" id="FuelTypeFilter" v-model="FuelTypeFilter">
                 <option value="Benzine">Benzine</option>
                 <option value="Diesel">Diesel</option>
                 <option value="Electricity">Electricity</option>
             </select>
-            <input type="button" id="searchVehicle" value="search" v-on:click="findMyVehicles" />
+            <input type="button" id="searchVehicle" value="search" v-on:click="findMyVehicles" />-->
         </form>
         <table class="greenTable">
             <thead>
@@ -61,9 +61,10 @@
 
 <script>
     import axios from 'axios';
+    const connectionUrl = 'http://localhost:3816/api/vehicle';
     export default {
         name: 'body',
-
+        
         data() {
             return {
 
@@ -82,7 +83,7 @@
 
                 axios({
                     method: 'post',
-                    url: 'http://localhost:3816/api/vehicle',
+                    url: connectionUrl,
                     data: {
                         "Id": this.Id,
                         "LicensePlate": this.LicensePlate,
@@ -98,18 +99,17 @@
             deleteFromDatabase: function () {
                 axios({
                     method: 'delete',
-                    url: 'http://localhost:3816/api/vehicle',
+                    url: connectionUrl,
                     data: {
                         "Id": this.Id
                     }
                 }).then(response => (this.vehicles = response.data));
-                //var empt = document.forms.saveVehicleForm;
-                //empt.elements.Id.value = "0";
             },
+            //TODO: Fix this.
             findMyVehicles: function () {
                 axios({
                     method: 'get',
-                    url: 'http://localhost:3816/api/vehicle',
+                    url: connectionUrl,
                     data: {
                         "FuelType": this.FuelType
                     }
@@ -119,7 +119,7 @@
         }
         , mounted() {
             axios
-                .get('http://localhost:3816/api/vehicle')
+                .get(connectionUrl)
                 .then(response => (this.vehicles = response.data));
         }
     }

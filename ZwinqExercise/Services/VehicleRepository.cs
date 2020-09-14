@@ -22,10 +22,15 @@ namespace ZwinqExercise.Services
         {
             sqlConnection = new SqlConnection(databaseConnection.connectionPath);
         }
+        /// <summary>
+        /// Get all the vehicles
+        /// </summary>
+        /// <returns>Returns all the vehicles in the database</returns>
         public List<Vehicle> GetAllVehicles()
         {
             SqlDataReader sql = null;
             List<Vehicle> results = new List<Vehicle>();
+            //try to make the connection and retrieve all the data in the database
             try
             {
                 sqlConnection.Open();
@@ -50,6 +55,7 @@ namespace ZwinqExercise.Services
 
 
             }
+            //close the connection
             finally
             {
                 if (sql != null)
@@ -65,6 +71,11 @@ namespace ZwinqExercise.Services
 
 
         }
+        /// <summary>
+        /// Uses the data it gets from the frontend and inserts it in the database
+        /// </summary>
+        /// <param name="vehicle">The new vehicle that got send from the frontend</param>
+        /// <returns>All the vehicles in the database</returns>
         public List<Vehicle> CreateNewVehicle(Vehicle vehicle)
         {
             if (vehicle != null)
@@ -96,6 +107,12 @@ namespace ZwinqExercise.Services
             }
             return GetAllVehicles();
         }
+        /// <summary>
+        /// Searches on fueltype and checks if the fueltype given is one of the three predertimend (The frontend part doesnt work).
+        /// TODO: fix the frontend part
+        /// </summary>
+        /// <param name="vehicle">The fueltype that is asked</param>
+        /// <returns>List of the selected vehicles</returns>
         public List<Vehicle> SearchOnFuelType(Vehicle vehicle)
         {
             SqlDataReader sql = null;
@@ -140,7 +157,11 @@ namespace ZwinqExercise.Services
             }
             return GetAllVehicles();
         }
-
+        /// <summary>
+        /// Deletes a vehicle based on the id.
+        /// </summary>
+        /// <param name="vehicle">The vehicle that needs to be deleted</param>
+        /// <returns>The entire list of vehicles after the given one got deleted</returns>
         public List<Vehicle> DeleteExistingVehicle(Vehicle vehicle)
         {
             try
